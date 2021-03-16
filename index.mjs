@@ -1,15 +1,19 @@
-import { Name as BookName, Type as BookType } from './type/book.js';
-import { Name as AuthorName, Type as AuthorType } from './type/author.js';
 import { ApolloServer, gql } from 'apollo-server-express';
 import express from 'express';
 
 const schema = gql`
-  ${BookType}
-  ${AuthorType}
+  type Book {
+    title: String
+    author: Author
+  }
+  type Author {
+    name: String
+    age: Int
+  }
 
   type Query {
-    books: [${BookName}],
-    authors: [${AuthorName}]
+    books: [Book],
+    authors: [Author]
   }
 `;
 
@@ -38,7 +42,7 @@ const resolvers = {
   Query: {
     books: () => books,
     authors: () => authors,
-  }
+  },
 };
 
 const server = new ApolloServer({ typeDefs: schema, resolvers });
